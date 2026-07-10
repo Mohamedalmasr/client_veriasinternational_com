@@ -464,6 +464,598 @@ export default function TransactionFileDocumentationFormPage() {
           </div>
         </section>
 
+        {/* 3. Parties */}
+        <section className="mt-5 pt-4 border-t border-dashed border-[#d1d5db]">
+          <h2 className="m-0 mb-3 text-[1rem] uppercase tracking-[0.07em] text-[#1f4f8f] flex items-center gap-2">
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#1f4f8f] text-white text-xs font-bold">
+              3
+            </span>
+            Parties
+          </h2>
+          <div className="grid grid-cols-1 gap-y-2">
+            <div className={ROW}>
+              <label className="w-[230px] text-[0.8rem] font-semibold">
+                Vendor(s) Names
+              </label>
+              <Input
+                {...register("vendorNames")}
+                className={INPUT}
+                placeholder="Enter vendor name(s)"
+              />
+            </div>
+            <div className={ROW}>
+              <label className="w-[230px] text-[0.8rem] font-semibold">
+                Vendor Contact Info
+              </label>
+              <Textarea
+                {...register("vendorContact")}
+                className={INPUT}
+                rows={3}
+                placeholder="Enter vendor contact details"
+              />
+            </div>
+            <div className={ROW}>
+              <label className="w-[230px] text-[0.8rem] font-semibold">
+                Purchaser(s) Names
+              </label>
+              <Input
+                {...register("purchaserNames")}
+                className={INPUT}
+                placeholder="Enter purchaser name(s)"
+              />
+            </div>
+            <div className={ROW}>
+              <label className="w-[230px] text-[0.8rem] font-semibold">
+                Purchaser Contact Info
+              </label>
+              <Textarea
+                {...register("purchaserContact")}
+                className={INPUT}
+                rows={3}
+                placeholder="Enter purchaser contact details"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* 4. Key Dates */}
+        <section className="mt-5 pt-4 border-t border-dashed border-[#d1d5db]">
+          <h2 className="m-0 mb-3 text-[1rem] uppercase tracking-[0.07em] text-[#1f4f8f] flex items-center gap-2">
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#1f4f8f] text-white text-xs font-bold">
+              4
+            </span>
+            Key Dates
+          </h2>
+          <div className="grid grid-cols-2 gap-y-2 gap-x-5">
+            <div className={ROW}>
+              <label className="w-[230px] text-[0.8rem] font-semibold">
+                MLS® Listing Start Date
+              </label>
+              <DatePicker
+                value={watch("mlsListingStartDate")}
+                onChange={(v) => setValue("mlsListingStartDate", v)}
+              />
+            </div>
+            <div className={ROW}>
+              <label className="w-[230px] text-[0.8rem] font-semibold">
+                Expiry Date
+              </label>
+              <DatePicker
+                value={watch("expiryDate")}
+                onChange={(v) => setValue("expiryDate", v)}
+              />
+            </div>
+            <div className={ROW}>
+              <label className="w-[230px] text-[0.8rem] font-semibold">
+                Date Offer Received
+              </label>
+              <DatePicker
+                value={watch("dateOfferReceived")}
+                onChange={(v) => setValue("dateOfferReceived", v)}
+              />
+            </div>
+            <div className={ROW}>
+              <label className="w-[230px] text-[0.8rem] font-semibold">
+                Date Offer Accepted
+              </label>
+              <DatePicker
+                value={watch("dateOfferAccepted")}
+                onChange={(v) => setValue("dateOfferAccepted", v)}
+              />
+            </div>
+            <div className={ROW}>
+              <label className="w-[230px] text-[0.8rem] font-semibold">
+                Scheduled Closing Date (original)
+              </label>
+              <DatePicker
+                value={watch("scheduledClosingDate")}
+                onChange={(v) => setValue("scheduledClosingDate", v)}
+              />
+            </div>
+            <div className={ROW}>
+              <label className="w-[230px] text-[0.8rem] font-semibold">
+                Revised Closing Date 1
+              </label>
+              <DatePicker
+                value={watch("revisedClosingDate1")}
+                onChange={(v) => setValue("revisedClosingDate1", v)}
+              />
+            </div>
+            <div className={ROW}>
+              <label className="w-[230px] text-[0.8rem] font-semibold">
+                Revised Closing Date 2
+              </label>
+              <DatePicker
+                value={watch("revisedClosingDate2")}
+                onChange={(v) => setValue("revisedClosingDate2", v)}
+              />
+            </div>
+            <div className={ROW}>
+              <label className="w-[230px] text-[0.8rem] font-semibold">
+                Actual Closing Date
+              </label>
+              <DatePicker
+                value={watch("actualClosingDate")}
+                onChange={(v) => setValue("actualClosingDate", v)}
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* 6. Trust Funds – Deposits */}
+        <section className="mt-5 pt-4 border-t border-dashed border-[#d1d5db]">
+          <h2 className="m-0 mb-3 text-[1rem] uppercase tracking-[0.07em] text-[#1f4f8f] flex items-center gap-2">
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#1f4f8f] text-white text-xs font-bold">
+              6
+            </span>
+            Trust Funds – Deposits
+          </h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-[0.85rem] border-collapse">
+              <thead>
+                <tr className="bg-[#f0f4f8]">
+                  <th className="p-2 text-left font-semibold border border-[#d1d5db]">
+                    Deposit #
+                  </th>
+                  <th className="p-2 text-left font-semibold border border-[#d1d5db]">
+                    Amount
+                  </th>
+                  <th className="p-2 text-left font-semibold border border-[#d1d5db]">
+                    Date Received
+                  </th>
+                  <th className="p-2 text-left font-semibold border border-[#d1d5db]">
+                    Method (Cheque/EMT/Other)
+                  </th>
+                  <th className="p-2 text-left font-semibold border border-[#d1d5db]">
+                    Date Deposited to Trust
+                  </th>
+                  <th className="p-2 text-left font-semibold border border-[#d1d5db]">
+                    Trust Account Name & No.
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {watch("deposits")?.map((_, idx) => (
+                  <tr key={idx}>
+                    <td className="p-2 font-medium border border-[#d1d5db]">{`Deposit ${idx + 1}`}</td>
+                    <td className="p-2 border border-[#d1d5db]">
+                      <div className="flex items-center gap-1">
+                        <span className="text-[0.8rem]">$</span>
+                        <Input
+                          {...register(`deposits.${idx}.amount`)}
+                          type="number"
+                          step="0.01"
+                          className={INPUT}
+                        />
+                      </div>
+                    </td>
+                    <td className="p-2 border border-[#d1d5db]">
+                      <DatePicker
+                        value={watch(`deposits.${idx}.dateReceived`)}
+                        onChange={(v) => setValue(`deposits.${idx}.dateReceived`, v)}
+                      />
+                    </td>
+                    <td className="p-2 border border-[#d1d5db]">
+                      <Input
+                        {...register(`deposits.${idx}.method`)}
+                        className={INPUT}
+                      />
+                    </td>
+                    <td className="p-2 border border-[#d1d5db]">
+                      <DatePicker
+                        value={watch(`deposits.${idx}.dateDeposited`)}
+                        onChange={(v) => setValue(`deposits.${idx}.dateDeposited`, v)}
+                      />
+                    </td>
+                    <td className="p-2 border border-[#d1d5db]">
+                      <Input
+                        {...register(`deposits.${idx}.trustAccount`)}
+                        className={INPUT}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="grid grid-cols-2 gap-y-2 gap-x-5 mt-3">
+            <div className={ROW}>
+              <label className="w-[230px] text-[0.8rem] font-semibold">
+                Total Deposits Held in Trust
+              </label>
+              <div className="flex items-center gap-1">
+                <span className="text-[0.8rem]">$</span>
+                <Input
+                  {...register("totalDeposits")}
+                  type="number"
+                  step="0.01"
+                  className={INPUT}
+                />
+              </div>
+            </div>
+            <div className={ROW}>
+              <label className="w-[230px] text-[0.8rem] font-semibold">
+                Trust Ledger Reference No.
+              </label>
+              <Input
+                {...register("trustLedgerRef")}
+                className={INPUT}
+                placeholder="Enter ledger reference"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* 7. Trust Funds – Disbursements & Final Reconciliation */}
+        <section className="mt-5 pt-4 border-t border-dashed border-[#d1d5db]">
+          <h2 className="m-0 mb-3 text-[1rem] uppercase tracking-[0.07em] text-[#1f4f8f] flex items-center gap-2">
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#1f4f8f] text-white text-xs font-bold">
+              7
+            </span>
+            Trust Funds – Disbursements & Final Reconciliation
+          </h2>
+          <div className={ROW + " mb-3"}>
+            <label className="w-[300px] text-[0.8rem] font-semibold">
+              Did the transaction close? (Yes/No)
+            </label>
+            <Input
+              {...register("didTransactionClose")}
+              className={INPUT}
+              placeholder="Yes or No"
+            />
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-[0.85rem] border-collapse">
+              <thead>
+                <tr className="bg-[#f0f4f8]">
+                  <th className="p-2 text-left font-semibold border border-[#d1d5db]">
+                    Description
+                  </th>
+                  <th className="p-2 text-left font-semibold border border-[#d1d5db]">
+                    Amount
+                  </th>
+                  <th className="p-2 text-left font-semibold border border-[#d1d5db]">
+                    Date
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {watch("disbursements")?.map((d, idx) => (
+                  <tr key={idx}>
+                    <td className="p-2 border border-[#d1d5db]">{d.description}</td>
+                    <td className="p-2 border border-[#d1d5db]">
+                      <Input
+                        {...register(`disbursements.${idx}.amount`)}
+                        type="number"
+                        step="0.01"
+                        className={INPUT}
+                      />
+                    </td>
+                    <td className="p-2 border border-[#d1d5db]">
+                      <DatePicker
+                        value={watch(`disbursements.${idx}.date`)}
+                        onChange={(v) => setValue(`disbursements.${idx}.date`, v)}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="grid grid-cols-1 gap-y-2 mt-3">
+            <div className={ROW}>
+              <label className="w-[300px] text-[0.8rem] font-semibold">
+                Trust Balance After Final Disbursement
+              </label>
+              <div className="flex items-center gap-1">
+                <span className="text-[0.8rem]">$</span>
+                <Input
+                  {...register("trustBalance")}
+                  type="number"
+                  step="0.01"
+                  className={INPUT}
+                />
+              </div>
+            </div>
+            <div className={ROW}>
+              <label className="w-[300px] text-[0.8rem] font-semibold">
+                If did not close – Reason and Deposit Direction
+              </label>
+              <Textarea
+                {...register("reasonIfNotClosed")}
+                className={INPUT}
+                rows={3}
+                placeholder="Enter reason and deposit direction"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* 8. Conditions & Waivers */}
+        <section className="mt-5 pt-4 border-t border-dashed border-[#d1d5db]">
+          <h2 className="m-0 mb-3 text-[1rem] uppercase tracking-[0.07em] text-[#1f4f8f] flex items-center gap-2">
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#1f4f8f] text-white text-xs font-bold">
+              8
+            </span>
+            Conditions & Waivers
+          </h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-[0.85rem] border-collapse">
+              <thead>
+                <tr className="bg-[#f0f4f8]">
+                  <th className="p-2 text-left font-semibold border border-[#d1d5db]">
+                    Condition
+                  </th>
+                  <th className="p-2 text-left font-semibold border border-[#d1d5db]">
+                    Fulfilled / Waived / N/A
+                  </th>
+                  <th className="p-2 text-left font-semibold border border-[#d1d5db]">
+                    Date
+                  </th>
+                  <th className="p-2 text-left font-semibold border border-[#d1d5db]">
+                    Doc in File (Y/N)
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {watch("conditions")?.map((c, idx) => (
+                  <tr key={idx}>
+                    <td className="p-2 border border-[#d1d5db]">{c.condition}</td>
+                    <td className="p-2 border border-[#d1d5db]">
+                      <Input
+                        {...register(`conditions.${idx}.status`)}
+                        className={INPUT}
+                      />
+                    </td>
+                    <td className="p-2 border border-[#d1d5db]">
+                      <DatePicker
+                        value={watch(`conditions.${idx}.date`)}
+                        onChange={(v) => setValue(`conditions.${idx}.date`, v)}
+                      />
+                    </td>
+                    <td className="p-2 border border-[#d1d5db]">
+                      <Input
+                        {...register(`conditions.${idx}.docInFile`)}
+                        className={INPUT}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* 9. Key Documents Checklist */}
+        <section className="mt-5 pt-4 border-t border-dashed border-[#d1d5db]">
+          <h2 className="m-0 mb-3 text-[1rem] uppercase tracking-[0.07em] text-[#1f4f8f] flex items-center gap-2">
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#1f4f8f] text-white text-xs font-bold">
+              9
+            </span>
+            Key Documents Checklist
+          </h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-[0.85rem] border-collapse">
+              <thead>
+                <tr className="bg-[#f0f4f8]">
+                  <th className="p-2 text-left font-semibold border border-[#d1d5db]">
+                    Document
+                  </th>
+                  <th className="p-2 text-left font-semibold border border-[#d1d5db]">
+                    In File (Y/N)
+                  </th>
+                  <th className="p-2 text-left font-semibold border border-[#d1d5db]">
+                    Comments / Location
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {watch("documents")?.map((doc, idx) => (
+                  <tr key={idx}>
+                    <td className="p-2 border border-[#d1d5db]">{doc.document}</td>
+                    <td className="p-2 border border-[#d1d5db]">
+                      <Input
+                        {...register(`documents.${idx}.inFile`)}
+                        className={INPUT}
+                      />
+                    </td>
+                    <td className="p-2 border border-[#d1d5db]">
+                      <Input
+                        {...register(`documents.${idx}.comments`)}
+                        className={INPUT}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className={ROW + " mt-3"}>
+            <label className="w-[300px] text-[0.8rem] font-semibold">
+              Missing Documents / Exceptions
+            </label>
+            <Textarea
+              {...register("missingDocuments")}
+              className={INPUT}
+              rows={3}
+              placeholder="List any missing documents or exceptions"
+            />
+          </div>
+        </section>
+
+        {/* 10. Compliance Review */}
+        <section className="mt-5 pt-4 border-t border-dashed border-[#d1d5db]">
+          <h2 className="m-0 mb-3 text-[1rem] uppercase tracking-[0.07em] text-[#1f4f8f] flex items-center gap-2">
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#1f4f8f] text-white text-xs font-bold">
+              10
+            </span>
+            Compliance Review
+          </h2>
+          <div className="space-y-4">
+            <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
+              <div className={ROW + " mb-2"}>
+                <label className="w-[400px] text-[0.8rem] font-semibold">
+                  Were all deposits deposited into trust without delay? (Yes/No)
+                </label>
+                <Input
+                  {...register("depositsDepositedWithoutDelay")}
+                  className={INPUT}
+                  placeholder="Yes or No"
+                />
+              </div>
+              <div className={ROW}>
+                <label className="w-[120px] text-[0.8rem] font-semibold">
+                  Details if No
+                </label>
+                <Textarea
+                  {...register("depositsDetails")}
+                  className={INPUT}
+                  rows={2}
+                  placeholder="Provide details"
+                />
+              </div>
+            </div>
+
+            <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
+              <div className={ROW + " mb-2"}>
+                <label className="w-[400px] text-[0.8rem] font-semibold">
+                  Were trust funds disbursed in accordance with terms received? (Yes/No)
+                </label>
+                <Input
+                  {...register("trustFundsDisbursed")}
+                  className={INPUT}
+                  placeholder="Yes or No"
+                />
+              </div>
+              <div className={ROW}>
+                <label className="w-[120px] text-[0.8rem] font-semibold">
+                  Details if No
+                </label>
+                <Textarea
+                  {...register("trustFundsDetails")}
+                  className={INPUT}
+                  rows={2}
+                  placeholder="Provide details"
+                />
+              </div>
+            </div>
+
+            <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
+              <div className={ROW + " mb-2"}>
+                <label className="w-[400px] text-[0.8rem] font-semibold">
+                  Does trust ledger balance agree with monthly trust bank reconciliation? (Yes/No)
+                </label>
+                <Input
+                  {...register("trustLedgerAgrees")}
+                  className={INPUT}
+                  placeholder="Yes or No"
+                />
+              </div>
+              <div className={ROW}>
+                <label className="w-[120px] text-[0.8rem] font-semibold">
+                  Details / follow-up
+                </label>
+                <Textarea
+                  {...register("trustLedgerDetails")}
+                  className={INPUT}
+                  rows={2}
+                  placeholder="Provide details"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 11. Sign-Off */}
+        <section className="mt-5 pt-4 border-t border-dashed border-[#d1d5db]">
+          <h2 className="m-0 mb-3 text-[1rem] uppercase tracking-[0.07em] text-[#1f4f8f] flex items-center gap-2">
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#1f4f8f] text-white text-xs font-bold">
+              11
+            </span>
+            Sign-Off
+          </h2>
+          <div className="grid grid-cols-2 gap-y-2 gap-x-5">
+            <div className={ROW}>
+              <label className="w-[230px] text-[0.8rem] font-semibold">
+                Prepared By (Name)
+              </label>
+              <Input
+                {...register("preparedByName")}
+                className={INPUT}
+                placeholder="Enter preparer name"
+              />
+            </div>
+            <div className={ROW}>
+              <label className="w-[230px] text-[0.8rem] font-semibold">
+                Signature
+              </label>
+              <Input
+                {...register("preparedSignature")}
+                className={INPUT}
+                placeholder="Enter signature"
+              />
+            </div>
+            <div className={ROW}>
+              <label className="w-[230px] text-[0.8rem] font-semibold">
+                Date
+              </label>
+              <DatePicker
+                value={watch("preparedDate")}
+                onChange={(v) => setValue("preparedDate", v)}
+              />
+            </div>
+            <div className={ROW}>
+              <label className="w-[230px] text-[0.8rem] font-semibold">
+                Reviewed By (Manager/Broker)
+              </label>
+              <Input
+                {...register("reviewedByName")}
+                className={INPUT}
+                placeholder="Enter reviewer name"
+              />
+            </div>
+            <div className={ROW}>
+              <label className="w-[230px] text-[0.8rem] font-semibold">
+                Signature
+              </label>
+              <Input
+                {...register("reviewedSignature")}
+                className={INPUT}
+                placeholder="Enter signature"
+              />
+            </div>
+            <div className={ROW}>
+              <label className="w-[230px] text-[0.8rem] font-semibold">
+                Date
+              </label>
+              <DatePicker
+                value={watch("reviewedDate")}
+                onChange={(v) => setValue("reviewedDate", v)}
+              />
+            </div>
+          </div>
+        </section>
+
         {/* Buttons */}
         <div className="flex justify-end gap-3 mt-8 pt-4 border-t border-gray-200">
           <Button
