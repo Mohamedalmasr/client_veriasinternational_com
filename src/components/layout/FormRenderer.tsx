@@ -26,8 +26,17 @@ const TransactionFileDocumentationForm = dynamic(
   { loading: () => <FormSkeleton /> },
 );
 
+const ThirdPartyDepositAcknowledgementForm = dynamic(
+  () =>
+    import("@/app/Real_Estate_Brokerage/Third_Party_Deposit_Acknowledgement_Form/page").then(
+      (mod) => ({ default: mod.default }),
+    ),
+  { loading: () => <FormSkeleton /> },
+);
+
 const formComponents: Record<string, React.ComponentType> = {
   Transaction_File_Documentation_Form: TransactionFileDocumentationForm,
+  Third_Party_Deposit_Acknowledgement_Form: ThirdPartyDepositAcknowledgementForm,
 };
 
 export function FormRenderer({ formKey }: { formKey: string }) {
