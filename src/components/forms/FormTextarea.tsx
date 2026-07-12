@@ -10,6 +10,7 @@ interface FormTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaEle
   containerClassName?: string;
   labelClassName?: string;
   helperText?: string;
+  stacked?: boolean;
 }
 
 export const FormTextarea = forwardRef<HTMLTextAreaElement, FormTextareaProps>(
