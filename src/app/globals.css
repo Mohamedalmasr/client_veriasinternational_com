@@ -137,3 +137,36 @@
     @apply font-sans;
   }
 }
+
+.ril-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.3s ease;
+}
+
+.ril-scrollbar:hover {
+  scrollbar-color: #94a3b8 transparent;
+}
+
+.ril-scrollbar::-webkit-scrollbar {
+  height: 6px;
+}
+
+.ril-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 3px;
+}
+
+.ril-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 3px;
+  transition: background 0.3s ease;
+}
+
+.ril-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+}
+
+.ril-scrollbar:hover::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
