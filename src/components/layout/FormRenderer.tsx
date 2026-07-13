@@ -42,10 +42,28 @@ const SalesRecordSheetForm = dynamic(
   { loading: () => <FormSkeleton /> },
 );
 
+const ReconcilingItemsLogForm = dynamic(
+  () =>
+    import("@/app/Real_Estate_Brokerage/Reconciling_Items_Log/page").then(
+      (mod) => ({ default: mod.default }),
+    ),
+  { loading: () => <FormSkeleton /> },
+);
+
+const MonthlyTrustReconciliationChecklistForm = dynamic(
+  () =>
+    import("@/app/Real_Estate_Brokerage/Monthly_Trust_Reconciliation_Checklist_Form/page").then(
+      (mod) => ({ default: mod.default }),
+    ),
+  { loading: () => <FormSkeleton /> },
+);
+
 const formComponents: Record<string, React.ComponentType> = {
   Transaction_File_Documentation_Form: TransactionFileDocumentationForm,
   Third_Party_Deposit_Acknowledgement_Form: ThirdPartyDepositAcknowledgementForm,
   Sales_Record_Sheet_Template: SalesRecordSheetForm,
+  Reconciling_Items_Log: ReconcilingItemsLogForm,
+  Monthly_Trust_Reconciliation_Checklist_Form: MonthlyTrustReconciliationChecklistForm,
 };
 
 export function FormRenderer({ formKey }: { formKey: string }) {
