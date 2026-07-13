@@ -58,12 +58,21 @@ const MonthlyTrustReconciliationChecklistForm = dynamic(
   { loading: () => <FormSkeleton /> },
 );
 
+const MonthlyTrustAccountChecklistMonthEndCutOffForm = dynamic(
+  () =>
+    import("@/app/Real_Estate_Brokerage/Monthly_Trust_Account_Checklist_MonthEndCutOff/page").then(
+      (mod) => ({ default: mod.default }),
+    ),
+  { loading: () => <FormSkeleton /> },
+);
+
 const formComponents: Record<string, React.ComponentType> = {
   Transaction_File_Documentation_Form: TransactionFileDocumentationForm,
   Third_Party_Deposit_Acknowledgement_Form: ThirdPartyDepositAcknowledgementForm,
   Sales_Record_Sheet_Template: SalesRecordSheetForm,
   Reconciling_Items_Log: ReconcilingItemsLogForm,
   Monthly_Trust_Reconciliation_Checklist_Form: MonthlyTrustReconciliationChecklistForm,
+  Monthly_Trust_Account_Checklist_MonthEndCutOff: MonthlyTrustAccountChecklistMonthEndCutOffForm,
 };
 
 export function FormRenderer({ formKey }: { formKey: string }) {
