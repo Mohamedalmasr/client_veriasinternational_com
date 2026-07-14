@@ -82,6 +82,14 @@ const ComplianceActionRegisterForm = dynamic(
   { loading: () => <FormSkeleton /> },
 );
 
+const CommissionAmendmentForm = dynamic(
+  () =>
+    import("@/app/Real_Estate_Brokerage/Commission_Amendment_Form/page").then(
+      (mod) => ({ default: mod.default }),
+    ),
+  { loading: () => <FormSkeleton /> },
+);
+
 const formComponents: Record<string, React.ComponentType> = {
   Transaction_File_Documentation_Form: TransactionFileDocumentationForm,
   Third_Party_Deposit_Acknowledgement_Form: ThirdPartyDepositAcknowledgementForm,
@@ -91,6 +99,7 @@ const formComponents: Record<string, React.ComponentType> = {
   Monthly_Trust_Account_Checklist_MonthEndCutOff: MonthlyTrustAccountChecklistMonthEndCutOffForm,
   Monthend_activity: MonthendActivityForm,
   Compliance_Action_Register: ComplianceActionRegisterForm,
+  Commission_Amendment_Form: CommissionAmendmentForm,
 };
 
 export function FormRenderer({ formKey }: { formKey: string }) {
