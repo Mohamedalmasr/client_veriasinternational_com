@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DatePicker } from "@/components/ui/date-picker";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -33,16 +34,16 @@ const defaultValues: MonthendActivityFormValues = {
   monthType: "normal",
 
   s1: {
-    s1_1: { status: "", comments: "" },
-    s1_2: { status: "", comments: "" },
-    s1_3: { status: "", comments: "" },
+    s1_1: { status: "", comments: "", init: false },
+    s1_2: { status: "", comments: "", init: false },
+    s1_3: { status: "", comments: "", init: false },
   },
 
   s2: {
-    s2_1: { status: "", comments: "" },
-    s2_2: { status: "", comments: "" },
-    s2_3: { status: "", comments: "" },
-    s2_4: { status: "", comments: "" },
+    s2_1: { status: "", comments: "", init: false },
+    s2_2: { status: "", comments: "", init: false },
+    s2_3: { status: "", comments: "", init: false },
+    s2_4: { status: "", comments: "", init: false },
   },
 
   unusualBalances: [
@@ -53,6 +54,7 @@ const defaultValues: MonthendActivityFormValues = {
       natureOfIssue: "",
       actionPlan: "",
       targetResolutionDate: "",
+      init: false,
     },
   ],
 
@@ -63,10 +65,10 @@ const defaultValues: MonthendActivityFormValues = {
     otherAdjustments: "",
     reconciledBalance: "",
     controls: {
-      s3_1: { status: "", comments: "" },
-      s3_2: { status: "", comments: "" },
-      s3_3: { status: "", comments: "" },
-      s3_4: { status: "", comments: "" },
+      s3_1: { status: "", comments: "", init: false },
+      s3_2: { status: "", comments: "", init: false },
+      s3_3: { status: "", comments: "", init: false },
+      s3_4: { status: "", comments: "", init: false },
     },
   },
 
@@ -75,36 +77,36 @@ const defaultValues: MonthendActivityFormValues = {
     totalTrustLiability: "",
     difference: "",
     controls: {
-      s4_1: { status: "", comments: "" },
-      s4_2: { status: "", comments: "" },
+      s4_1: { status: "", comments: "", init: false },
+      s4_2: { status: "", comments: "", init: false },
     },
     differenceExplanation: "",
   },
 
   s5: {
-    s5_1: { status: "", comments: "" },
-    s5_2: { status: "", comments: "" },
-    s5_3: { status: "", comments: "" },
-    s5_4: { status: "", comments: "" },
-    s5_5: { status: "", comments: "" },
-    s5_6: { status: "", comments: "" },
+    s5_1: { status: "", comments: "", init: false },
+    s5_2: { status: "", comments: "", init: false },
+    s5_3: { status: "", comments: "", init: false },
+    s5_4: { status: "", comments: "", init: false },
+    s5_5: { status: "", comments: "", init: false },
+    s5_6: { status: "", comments: "", init: false },
   },
 
   preparerCert: { name: "", signature: "", date: "" },
 
   s6: {
-    s6_1: { status: "", comments: "" },
-    s6_2: { status: "", comments: "" },
-    s6_3: { status: "", comments: "" },
+    s6_1: { status: "", comments: "", init: false },
+    s6_2: { status: "", comments: "", init: false },
+    s6_3: { status: "", comments: "", init: false },
     lmComments: "",
   },
 
   lmReview: { name: "", signature: "", date: "" },
 
   s7: {
-    s7_1: { status: "", comments: "" },
-    s7_2: { status: "", comments: "" },
-    s7_3: { status: "", comments: "" },
+    s7_1: { status: "", comments: "", init: false },
+    s7_2: { status: "", comments: "", init: false },
+    s7_3: { status: "", comments: "", init: false },
   },
 
   s7PreparerCert: { name: "", signature: "", date: "" },
@@ -171,6 +173,7 @@ function CheckpointTable({
   setValue,
   prefix,
   section,
+  showDetails = true,
 }: {
   rows: CheckpointRow[];
   register: ReturnType<typeof useForm<MonthendActivityFormValues>>["register"];
@@ -178,6 +181,7 @@ function CheckpointTable({
   setValue: ReturnType<typeof useForm<MonthendActivityFormValues>>["setValue"];
   prefix: string;
   section: string;
+  showDetails?: boolean;
 }) {
   return (
     <div className="overflow-x-auto ril-scrollbar">
@@ -187,7 +191,10 @@ function CheckpointTable({
             <TableHead className="h-9 text-[0.7rem] uppercase tracking-wider text-gray-600 font-semibold w-[50px] text-center">#</TableHead>
             <TableHead className="h-9 text-[0.7rem] uppercase tracking-wider text-gray-600 font-semibold">Requirement</TableHead>
             <TableHead className="h-9 text-[0.7rem] uppercase tracking-wider text-gray-600 font-semibold w-[60px] text-center">Y/N</TableHead>
-            <TableHead className="h-9 text-[0.7rem] uppercase tracking-wider text-gray-600 font-semibold min-w-[250px]">Details / Exceptions</TableHead>
+            {showDetails && (
+              <TableHead className="h-9 text-[0.7rem] uppercase tracking-wider text-gray-600 font-semibold min-w-[250px]">Details / Exceptions</TableHead>
+            )}
+            <TableHead className="h-9 text-[0.7rem] uppercase tracking-wider text-gray-600 font-semibold w-[50px] text-center">Init</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -210,10 +217,19 @@ function CheckpointTable({
                 </SelectContent>
               </Select>
             </TableCell>
-            <TableCell className="py-1.5 px-2">
-              <textarea
-                {...register(`${prefix}.${row.key}.comments` as Path<MonthendActivityFormValues>)}
-                className="w-full min-h-[32px] resize-y rounded border border-[#d1d5db] text-[0.8rem] bg-[#f9fafb] shadow-none focus:outline-[#1f4f8f] focus:border-[#1f4f8f] focus:bg-white focus:outline-[1px] placeholder:text-gray-400 leading-[1.4] p-1"
+            {showDetails && (
+              <TableCell className="py-1.5 px-2">
+                <textarea
+                  {...register(`${prefix}.${row.key}.comments` as Path<MonthendActivityFormValues>)}
+                  className="w-full min-h-[32px] resize-y rounded border border-[#d1d5db] text-[0.8rem] bg-[#f9fafb] shadow-none focus:outline-[#1f4f8f] focus:border-[#1f4f8f] focus:bg-white focus:outline-[1px] placeholder:text-gray-400 leading-[1.4] p-1"
+                />
+              </TableCell>
+            )}
+            <TableCell className="py-1.5 px-1 text-center">
+              <Checkbox
+                checked={Boolean(watch(`${prefix}.${row.key}.init` as Path<MonthendActivityFormValues>))}
+                onCheckedChange={(checked) => setValue(`${prefix}.${row.key}.init` as Path<MonthendActivityFormValues>, Boolean(checked))}
+                className="mx-auto"
               />
             </TableCell>
           </TableRow>
@@ -464,6 +480,7 @@ export default function MonthendactivityPage() {
                     natureOfIssue: "",
                     actionPlan: "",
                     targetResolutionDate: "",
+                    init: false,
                   })
                 }
               >
@@ -481,6 +498,7 @@ export default function MonthendactivityPage() {
                     <TableHead className="h-9 text-[0.7rem] uppercase tracking-wider text-gray-600 font-semibold w-[220px] min-w-[220px]">Nature of Issue / Reason</TableHead>
                     <TableHead className="h-9 text-[0.7rem] uppercase tracking-wider text-gray-600 font-semibold w-[220px] min-w-[220px]">Action Plan</TableHead>
                     <TableHead className="h-9 text-[0.7rem] uppercase tracking-wider text-gray-600 font-semibold w-[140px] min-w-[140px]">Target Resolution</TableHead>
+                    <TableHead className="h-9 text-[0.7rem] uppercase tracking-wider text-gray-600 font-semibold w-[50px] min-w-[50px] text-center">Init</TableHead>
                     <TableHead className="h-9 w-[50px] min-w-[50px]"></TableHead>
                   </TableRow>
                 </TableHeader>
@@ -527,6 +545,13 @@ export default function MonthendactivityPage() {
                         <DatePicker
                           value={watch(`unusualBalances.${idx}.targetResolutionDate`)}
                           onChange={(v) => setValue(`unusualBalances.${idx}.targetResolutionDate`, v)}
+                        />
+                      </TableCell>
+                      <TableCell className="py-1.5 px-1 text-center">
+                        <Checkbox
+                          checked={Boolean(watch(`unusualBalances.${idx}.init`))}
+                          onCheckedChange={(checked) => setValue(`unusualBalances.${idx}.init`, Boolean(checked))}
+                          className="mx-auto"
                         />
                       </TableCell>
                       <TableCell className="py-1.5 px-1">
@@ -613,7 +638,7 @@ export default function MonthendactivityPage() {
           <p className="m-0 mb-2 text-[0.85rem] text-gray-500 italic">
             Objective: Ensure a complete monthly package is compiled and ready for LM review.
           </p>
-          <CheckpointTable rows={SECTION_S5} register={register} watch={watch} setValue={setValue} prefix="s5" section="5" />
+          <CheckpointTable rows={SECTION_S5} register={register} watch={watch} setValue={setValue} prefix="s5" section="5" showDetails={false} />
 
           <SignOffBlock
             title="Preparer Certification"
@@ -636,7 +661,7 @@ export default function MonthendactivityPage() {
           <p className="m-0 mb-2 text-[0.85rem] text-gray-500 italic">
             Objective: LM reviews, challenges where necessary, and formally approves the reconciliation.
           </p>
-          <CheckpointTable rows={SECTION_S6} register={register} watch={watch} setValue={setValue} prefix="s6" section="6" />
+          <CheckpointTable rows={SECTION_S6} register={register} watch={watch} setValue={setValue} prefix="s6" section="6" showDetails={false} />
 
           <div className="mt-2">
             <FormTextarea

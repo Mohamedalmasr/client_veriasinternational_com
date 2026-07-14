@@ -3,6 +3,7 @@ import * as z from "zod";
 const checkpointRowSchema = z.object({
   status: z.string(),
   comments: z.string(),
+  init: z.boolean(),
 });
 
 const unusualBalanceSchema = z.object({
@@ -12,6 +13,7 @@ const unusualBalanceSchema = z.object({
   natureOfIssue: z.string(),
   actionPlan: z.string(),
   targetResolutionDate: z.string(),
+  init: z.boolean(),
 });
 
 export const monthendActivitySchema = z.object({

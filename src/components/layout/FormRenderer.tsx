@@ -74,6 +74,14 @@ const MonthendActivityForm = dynamic(
   { loading: () => <FormSkeleton /> },
 );
 
+const ComplianceActionRegisterForm = dynamic(
+  () =>
+    import("@/app/Real_Estate_Brokerage/Compliance_Action_Register/page").then(
+      (mod) => ({ default: mod.default }),
+    ),
+  { loading: () => <FormSkeleton /> },
+);
+
 const formComponents: Record<string, React.ComponentType> = {
   Transaction_File_Documentation_Form: TransactionFileDocumentationForm,
   Third_Party_Deposit_Acknowledgement_Form: ThirdPartyDepositAcknowledgementForm,
@@ -82,6 +90,7 @@ const formComponents: Record<string, React.ComponentType> = {
   Monthly_Trust_Reconciliation_Checklist_Form: MonthlyTrustReconciliationChecklistForm,
   Monthly_Trust_Account_Checklist_MonthEndCutOff: MonthlyTrustAccountChecklistMonthEndCutOffForm,
   Monthend_activity: MonthendActivityForm,
+  Compliance_Action_Register: ComplianceActionRegisterForm,
 };
 
 export function FormRenderer({ formKey }: { formKey: string }) {
