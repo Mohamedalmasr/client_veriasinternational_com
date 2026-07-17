@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useForm, useFieldArray, type Path } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -14,12 +14,14 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@
 import {
   FormErrorsDisplay,
   FormErrorsSummary,
-  type FormError,
 } from "@/components/forms/FormErrorsDisplay";
 import {
   complianceActionRegisterSchema,
   type ComplianceActionRegisterFormValues,
 } from "@/types/compliance-action-register";
+import { TEXTAREA_SM as TEXTAREA } from "@/features/real-estate/constants/form-config";
+import { complianceActionRegisterDefaultValues } from "@/features/real-estate/constants/default-values";
+import { useFormErrors } from "@/features/real-estate/utils/form-errors";
 
 const STATUS_OPTIONS = [
   "Not Started",
@@ -28,33 +30,12 @@ const STATUS_OPTIONS = [
   "Ongoing",
 ];
 
-const defaultValues: ComplianceActionRegisterFormValues = {
-  items: [
-    {
-      itemNumber: "",
-      recommendationId: "",
-      deficiencySummary: "",
-      inspectorRecommendation: "",
-      actionSteps: "",
-      responsiblePerson: "",
-      targetCompletionDate: "",
-      status: "",
-      actualCompletionDate: "",
-      policyReference: "",
-      notes: "",
-    },
-  ],
-};
-
-const TEXTAREA =
-  "w-full min-h-[50px] resize-y rounded border border-[#d1d5db] text-[0.8rem] bg-[#f9fafb] shadow-none focus:outline-[#1f4f8f] focus:border-[#1f4f8f] focus:bg-white focus:outline-[1px] placeholder:text-gray-400 leading-[1.4] p-1";
-
-export default function ComplianceActionRegisterPage() {
+export function ComplianceActionRegisterForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<ComplianceActionRegisterFormValues>({
     resolver: zodResolver(complianceActionRegisterSchema),
-    defaultValues,
+    defaultValues: complianceActionRegisterDefaultValues,
     mode: "onChange",
   });
 
@@ -70,19 +51,7 @@ export default function ComplianceActionRegisterPage() {
 
   const itemFields = useFieldArray({ control, name: "items" });
 
-  const formErrors = useMemo(() => {
-    const errorList: FormError[] = [];
-    Object.entries(errors).forEach(([key, error]) => {
-      if (error && typeof error === "object" && "message" in error) {
-        errorList.push({
-          field: key.charAt(0).toUpperCase() + key.slice(1),
-          message: String(error.message),
-          severity: "error",
-        });
-      }
-    });
-    return errorList;
-  }, [errors]);
+  const formErrors = useFormErrors(errors);
 
   const onSubmit = async (data: ComplianceActionRegisterFormValues) => {
     if (formErrors.length > 0) {

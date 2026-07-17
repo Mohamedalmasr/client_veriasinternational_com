@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useForm, type Path, type FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -15,59 +15,14 @@ import { FormTextarea } from "@/components/forms/FormTextarea";
 import {
   FormErrorsDisplay,
   FormErrorsSummary,
-  type FormError,
 } from "@/components/forms/FormErrorsDisplay";
 import {
   monthlyTrustReconciliationChecklistSchema,
   type MonthlyTrustReconciliationChecklistFormValues,
 } from "@/types/monthly-trust-reconciliation-checklist";
-
-const defaultValues: MonthlyTrustReconciliationChecklistFormValues = {
-  month: "",
-  date: "",
-  preparedBy: "",
-  licensedManager: "",
-
-  b: {
-    b1: { status: "Y", comments: "" },
-    b2: { status: "Y", comments: "" },
-    b3: { status: "Y", comments: "" },
-  },
-  c: {
-    c1: { status: "Y", comments: "" },
-    c2: { status: "Y", comments: "" },
-    c3: { status: "Y", comments: "" },
-    c4: { status: "Y", comments: "" },
-  },
-  d: {
-    d1: { status: "Y", comments: "" },
-    d2: { status: "Y", comments: "" },
-    d3: { status: "Y", comments: "" },
-    d4: { status: "Y", comments: "" },
-  },
-  e: {
-    e1: { status: "Y", comments: "" },
-    e2: { status: "Y", comments: "" },
-    differenceDetails: "",
-  },
-  f: {
-    f1: { status: "Y", comments: "" },
-    f2: { status: "Y", comments: "" },
-    f3: { status: "Y", comments: "" },
-    notes: "",
-  },
-  g: {
-    g1: { status: "Y", comments: "" },
-    g2: { status: "Y", comments: "" },
-    g3: { status: "Y", comments: "" },
-  },
-
-  preparer: { name: "", signature: "", date: "" },
-  licensedManagerReview: { name: "", signature: "", date: "" },
-  filing: { location: "", dateFiled: "", annualReview: "" },
-};
-
-const ROW = "flex items-center gap-2";
+import { ROW } from "@/features/real-estate/constants/form-config";
+import { monthlyTrustReconciliationChecklistDefaultValues } from "@/features/real-estate/constants/default-values";
+import { useFormErrors } from "@/features/real-estate/utils/form-errors";
 
 type CheckpointKey = `b${1|2|3}` | `c${1|2|3|4}` | `d${1|2|3|4}` | `e${1|2}` | `f${1|2|3}` | `g${1|2|3}`;
 
@@ -187,12 +142,12 @@ function SignOffBlock({ title, description, namePath, sigPath, datePath, registe
   );
 }
 
-export default function MonthlyTrustReconciliationChecklistFormPage() {
+export function MonthlyTrustReconciliationChecklistForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<MonthlyTrustReconciliationChecklistFormValues>({
     resolver: zodResolver(monthlyTrustReconciliationChecklistSchema),
-    defaultValues,
+    defaultValues: monthlyTrustReconciliationChecklistDefaultValues,
     mode: "onChange",
   });
 
@@ -205,19 +160,7 @@ export default function MonthlyTrustReconciliationChecklistFormPage() {
     setFocus,
   } = form;
 
-  const formErrors = useMemo(() => {
-    const errorList: FormError[] = [];
-    Object.entries(errors).forEach(([key, error]) => {
-      if (error && typeof error === "object" && "message" in error) {
-        errorList.push({
-          field: key.charAt(0).toUpperCase() + key.slice(1),
-          message: String(error.message),
-          severity: "error",
-        });
-      }
-    });
-    return errorList;
-  }, [errors]);
+  const formErrors = useFormErrors(errors);
 
   const onSubmit = async (data: MonthlyTrustReconciliationChecklistFormValues) => {
     if (formErrors.length > 0) {

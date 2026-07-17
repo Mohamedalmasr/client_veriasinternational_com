@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useForm, type Path } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -12,35 +12,14 @@ import { FormField } from "@/components/forms/FormField";
 import {
   FormErrorsDisplay,
   FormErrorsSummary,
-  type FormError,
 } from "@/components/forms/FormErrorsDisplay";
 import {
   monthlyTrustAccountChecklistSchema,
   type MonthlyTrustAccountChecklistFormValues,
 } from "@/types/monthly-trust-account-checklist";
-
-const defaultValues: MonthlyTrustAccountChecklistFormValues = {
-  monthYear: "",
-  preparedBy: "",
-  preparedDate: "",
-  reviewedBy: "",
-  reviewedDate: "",
-
-  s1_1: {
-    items: { s1_1_1: false, s1_1_2: false, s1_1_3: false, s1_1_4: false, s1_1_5: false, s1_1_6: false },
-    initials: { preparerInitials: "", preparerDate: "", managerInitials: "", managerDate: "" },
-  },
-  s1_2: {
-    items: { s1_2_1: false, s1_2_2: false, s1_2_2_a: false, s1_2_2_b: false, s1_2_2_c: false, s1_2_2_d: false, s1_2_3: false },
-    initials: { preparerInitials: "", preparerDate: "", managerInitials: "", managerDate: "" },
-  },
-  s1_3: {
-    items: { s1_3_1: false, s1_3_2: false, s1_3_3: false, s1_3_4: false },
-    initials: { preparerInitials: "", preparerDate: "", managerInitials: "", managerDate: "" },
-  },
-};
-
-const ROW = "flex items-center gap-2";
+import { ROW } from "@/features/real-estate/constants/form-config";
+import { monthlyTrustAccountChecklistDefaultValues } from "@/features/real-estate/constants/default-values";
+import { useFormErrors } from "@/features/real-estate/utils/form-errors";
 
 function InitialsBlock({ prefix, register, watch, setValue }: {
   prefix: string;
@@ -93,12 +72,12 @@ function ChecklistItem({ label, checked, onCheckedChange }: {
   );
 }
 
-export default function MonthlyTrustAccountChecklistMonthEndCutOffPage() {
+export function MonthlyTrustAccountChecklistForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<MonthlyTrustAccountChecklistFormValues>({
     resolver: zodResolver(monthlyTrustAccountChecklistSchema),
-    defaultValues,
+    defaultValues: monthlyTrustAccountChecklistDefaultValues,
     mode: "onChange",
   });
 
@@ -111,19 +90,7 @@ export default function MonthlyTrustAccountChecklistMonthEndCutOffPage() {
     setFocus,
   } = form;
 
-  const formErrors = useMemo(() => {
-    const errorList: FormError[] = [];
-    Object.entries(errors).forEach(([key, error]) => {
-      if (error && typeof error === "object" && "message" in error) {
-        errorList.push({
-          field: key.charAt(0).toUpperCase() + key.slice(1),
-          message: String(error.message),
-          severity: "error",
-        });
-      }
-    });
-    return errorList;
-  }, [errors]);
+  const formErrors = useFormErrors(errors);
 
   const onSubmit = async (data: MonthlyTrustAccountChecklistFormValues) => {
     if (formErrors.length > 0) {

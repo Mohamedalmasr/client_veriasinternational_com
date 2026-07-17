@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useForm, useFieldArray, type Path } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -17,103 +17,14 @@ import { FormTextarea } from "@/components/forms/FormTextarea";
 import {
   FormErrorsDisplay,
   FormErrorsSummary,
-  type FormError,
 } from "@/components/forms/FormErrorsDisplay";
 import {
   monthendActivitySchema,
   type MonthendActivityFormValues,
 } from "@/types/monthend-activity";
-
-const defaultValues: MonthendActivityFormValues = {
-  trustAccount: "",
-  monthEndDate: "",
-  preparerName: "",
-  datePrepared: "",
-  lmName: "",
-  dateReviewed: "",
-  monthType: "normal",
-
-  s1: {
-    s1_1: { status: "", comments: "", init: false },
-    s1_2: { status: "", comments: "", init: false },
-    s1_3: { status: "", comments: "", init: false },
-  },
-
-  s2: {
-    s2_1: { status: "", comments: "", init: false },
-    s2_2: { status: "", comments: "", init: false },
-    s2_3: { status: "", comments: "", init: false },
-    s2_4: { status: "", comments: "", init: false },
-  },
-
-  unusualBalances: [
-    {
-      fileClientId: "",
-      clientName: "",
-      amount: "",
-      natureOfIssue: "",
-      actionPlan: "",
-      targetResolutionDate: "",
-      init: false,
-    },
-  ],
-
-  s3: {
-    bankClosingBalance: "",
-    outstandingDeposits: "",
-    outstandingCheques: "",
-    otherAdjustments: "",
-    reconciledBalance: "",
-    controls: {
-      s3_1: { status: "", comments: "", init: false },
-      s3_2: { status: "", comments: "", init: false },
-      s3_3: { status: "", comments: "", init: false },
-      s3_4: { status: "", comments: "", init: false },
-    },
-  },
-
-  s4: {
-    reconciledBankBalance: "",
-    totalTrustLiability: "",
-    difference: "",
-    controls: {
-      s4_1: { status: "", comments: "", init: false },
-      s4_2: { status: "", comments: "", init: false },
-    },
-    differenceExplanation: "",
-  },
-
-  s5: {
-    s5_1: { status: "", comments: "", init: false },
-    s5_2: { status: "", comments: "", init: false },
-    s5_3: { status: "", comments: "", init: false },
-    s5_4: { status: "", comments: "", init: false },
-    s5_5: { status: "", comments: "", init: false },
-    s5_6: { status: "", comments: "", init: false },
-  },
-
-  preparerCert: { name: "", signature: "", date: "" },
-
-  s6: {
-    s6_1: { status: "", comments: "", init: false },
-    s6_2: { status: "", comments: "", init: false },
-    s6_3: { status: "", comments: "", init: false },
-    lmComments: "",
-  },
-
-  lmReview: { name: "", signature: "", date: "" },
-
-  s7: {
-    s7_1: { status: "", comments: "", init: false },
-    s7_2: { status: "", comments: "", init: false },
-    s7_3: { status: "", comments: "", init: false },
-  },
-
-  s7PreparerCert: { name: "", signature: "", date: "" },
-  s7LmReview: { name: "", signature: "", date: "" },
-};
-
-const ROW = "flex items-center gap-2";
+import { ROW } from "@/features/real-estate/constants/form-config";
+import { monthendActivityDefaultValues } from "@/features/real-estate/constants/default-values";
+import { useFormErrors } from "@/features/real-estate/utils/form-errors";
 
 interface CheckpointRow {
   checkpoint: string;
@@ -309,12 +220,12 @@ function SignOffBlock({
   );
 }
 
-export default function MonthendactivityPage() {
+export function MonthendActivityForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<MonthendActivityFormValues>({
     resolver: zodResolver(monthendActivitySchema),
-    defaultValues,
+    defaultValues: monthendActivityDefaultValues,
     mode: "onChange",
   });
 
@@ -330,19 +241,7 @@ export default function MonthendactivityPage() {
 
   const unusualBalanceFields = useFieldArray({ control, name: "unusualBalances" });
 
-  const formErrors = useMemo(() => {
-    const errorList: FormError[] = [];
-    Object.entries(errors).forEach(([key, error]) => {
-      if (error && typeof error === "object" && "message" in error) {
-        errorList.push({
-          field: key.charAt(0).toUpperCase() + key.slice(1),
-          message: String(error.message),
-          severity: "error",
-        });
-      }
-    });
-    return errorList;
-  }, [errors]);
+  const formErrors = useFormErrors(errors);
 
   const onSubmit = async (data: MonthendActivityFormValues) => {
     if (formErrors.length > 0) {
