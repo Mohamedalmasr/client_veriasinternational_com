@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useForm, type Path } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -11,40 +11,14 @@ import { DatePicker } from "@/components/ui/date-picker";
 import {
   FormErrorsDisplay,
   FormErrorsSummary,
-  type FormError,
 } from "@/components/forms/FormErrorsDisplay";
 import {
   commissionAmendmentSchema,
   type CommissionAmendmentFormValues,
 } from "@/types/commission-amendment";
-
-const defaultValues: CommissionAmendmentFormValues = {
-  mlsFileNumber: "",
-  sellerNames: "",
-  brokerageName: "",
-  propertyAddress: "",
-  previousCommissionTerms: "",
-  newCommissionTerms: "",
-  effectiveDate: "",
-  apsDate: "",
-  transactionsAffected: "",
-  seller1Name: "",
-  seller1Signature: "",
-  seller1Date: "",
-  seller2Name: "",
-  seller2Signature: "",
-  seller2Date: "",
-  brokerageRepName: "",
-  brokerageRepSignature: "",
-  brokerageRepTitle: "",
-  brokerageRepDate: "",
-};
-
-const ROW = "flex items-center gap-2";
-const INPUT =
-  "flex-1 min-w-0 h-8 text-[0.88rem] rounded border border-[#d1d5db] bg-[#f9fafb] shadow-none focus:outline-[#1f4f8f] focus:border-[#1f4f8f] focus:bg-white focus:outline-[1px] placeholder:text-gray-400 leading-[1.4]";
-const TEXTAREA =
-  "w-full min-h-[100px] resize-y rounded border border-[#d1d5db] text-[0.88rem] bg-[#f9fafb] shadow-none focus:outline-[#1f4f8f] focus:border-[#1f4f8f] focus:bg-white focus:outline-[1px] placeholder:text-gray-400 leading-[1.4] p-1";
+import { INPUT_SM as INPUT, ROW, TEXTAREA } from "@/features/real-estate/constants/form-config";
+import { commissionAmendmentDefaultValues } from "@/features/real-estate/constants/default-values";
+import { useFormErrors } from "@/features/real-estate/utils/form-errors";
 
 function SignatureBlock({
   title,
@@ -61,12 +35,12 @@ function SignatureBlock({
   );
 }
 
-export default function CommissionAmendmentFormPage() {
+export function CommissionAmendmentForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<CommissionAmendmentFormValues>({
     resolver: zodResolver(commissionAmendmentSchema),
-    defaultValues,
+    defaultValues: commissionAmendmentDefaultValues,
     mode: "onChange",
   });
 
@@ -79,19 +53,7 @@ export default function CommissionAmendmentFormPage() {
     setFocus,
   } = form;
 
-  const formErrors = useMemo(() => {
-    const errorList: FormError[] = [];
-    Object.entries(errors).forEach(([key, error]) => {
-      if (error && typeof error === "object" && "message" in error) {
-        errorList.push({
-          field: key.charAt(0).toUpperCase() + key.slice(1),
-          message: String(error.message),
-          severity: "error",
-        });
-      }
-    });
-    return errorList;
-  }, [errors]);
+  const formErrors = useFormErrors(errors);
 
   const onSubmit = async (data: CommissionAmendmentFormValues) => {
     if (formErrors.length > 0) {

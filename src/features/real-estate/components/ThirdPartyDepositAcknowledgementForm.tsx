@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useForm, type Path } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -15,79 +15,23 @@ import { FormTextarea } from "@/components/forms/FormTextarea";
 import {
   FormErrorsDisplay,
   FormErrorsSummary,
-  FormError,
 } from "@/components/forms/FormErrorsDisplay";
 import {
   thirdPartyDepositSchema,
   type ThirdPartyDepositFormValues,
 } from "@/types/third-party-deposit";
+import { INPUT, ROW } from "@/features/real-estate/constants/form-config";
+import { thirdPartyDepositDefaultValues } from "@/features/real-estate/constants/default-values";
+import { useFormErrors } from "@/features/real-estate/utils/form-errors";
 
-const defaultValues: ThirdPartyDepositFormValues = {
-  brokerageName: "",
 
-  transactionFileNo: "",
-  propertyAddress1: "",
-  propertyAddress2: "",
-  apsDate: "",
-  purchaser1: "",
-  purchaser2: "",
-  vendor1: "",
-  vendor2: "",
 
-  thirdPartyName: "",
-  relationshipToPurchaser: "",
-  thirdPartyAddress1: "",
-  thirdPartyAddress2: "",
-  thirdPartyPhone: "",
-  thirdPartyEmail: "",
-
-  depositAmount: "",
-  depositFormCash: false,
-  depositFormCheque: false,
-  depositFormBankDraft: false,
-  depositFormInterac: false,
-  depositFormOther: false,
-  depositFormOtherText: "",
-  depositReceivedDate: "",
-
-  closesDirection: false,
-  closesOther: "",
-
-  depositReturnTo: "",
-  depositReturnOther: "",
-
-  releasedToSeller: false,
-  additionalTerms: "",
-
-  thirdPartySignature: "",
-  thirdPartyPrintName: "",
-  thirdPartyDate: "",
-
-  purchaser1Signature: "",
-  purchaser1PrintName: "",
-  purchaser1Date: "",
-  purchaser2Signature: "",
-  purchaser2PrintName: "",
-  purchaser2Date: "",
-  additionalPurchasers: "",
-
-  brokerageNameAck: "",
-  brokerageRepName: "",
-  brokerageRepTitle: "",
-  brokerageRepSignature: "",
-  brokerageRepDate: "",
-};
-
-const INPUT =
-  "flex-1 min-w-0 rounded border border-[#d1d5db] text-[0.88rem] bg-[#f9fafb] shadow-none focus:outline-[#1f4f8f] focus:border-[#1f4f8f] focus:bg-white focus:outline-[1px] placeholder:text-gray-400 leading-[1.4]";
-const ROW = "flex items-center gap-2";
-
-export default function ThirdPartyDepositAcknowledgementFormPage() {
+export function ThirdPartyDepositAcknowledgementForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<ThirdPartyDepositFormValues>({
     resolver: zodResolver(thirdPartyDepositSchema),
-    defaultValues,
+    defaultValues: thirdPartyDepositDefaultValues,
     mode: "onChange",
   });
 
@@ -100,19 +44,7 @@ export default function ThirdPartyDepositAcknowledgementFormPage() {
     setFocus,
   } = form;
 
-  const formErrors = useMemo(() => {
-    const errorList: FormError[] = [];
-    Object.entries(errors).forEach(([key, error]) => {
-      if (error && typeof error === "object" && "message" in error) {
-        errorList.push({
-          field: key.charAt(0).toUpperCase() + key.slice(1),
-          message: String(error.message),
-          severity: "error",
-        });
-      }
-    });
-    return errorList;
-  }, [errors]);
+  const formErrors = useFormErrors(errors);
 
   const onSubmit = async (data: ThirdPartyDepositFormValues) => {
     if (formErrors.length > 0) {

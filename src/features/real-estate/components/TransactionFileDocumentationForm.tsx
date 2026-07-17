@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -12,7 +12,6 @@ import { DatePicker } from "@/components/ui/date-picker";
 import {
   FormErrorsDisplay,
   FormErrorsSummary,
-  FormError,
 } from "@/components/forms/FormErrorsDisplay";
 import {
   formSchema,
@@ -20,145 +19,15 @@ import {
 } from "@/types/transaction-file-documentation";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { INPUT, ROW } from "@/features/real-estate/constants/form-config";
+import { transactionFileDocumentationDefaultValues } from "@/features/real-estate/constants/default-values";
+import { useFormErrors } from "@/features/real-estate/utils/form-errors";
 
-const defaultValues: TransactionFileDocumentationFormValues = {
-  brokerageName: "",
-  branch: "",
-  preparedBy: "",
-  datePrepared: new Date().toISOString().split("T")[0],
-  reviewedBy: "",
-  dateReviewed: "",
-  transactionFileNo: "",
-  sequentialSalesNo: "",
-  mlsNo: "",
-  internalRefNo: "",
-  transactionType: "",
-  otherTransactionType: "",
-  status: "",
-  civicAddress: "",
-  municipality: "",
-  province: "",
-  postalCode: "",
-  vendorNames: "",
-  vendorContact: "",
-  purchaserNames: "",
-  purchaserContact: "",
-  mlsListingStartDate: "",
-  expiryDate: "",
-  dateOfferReceived: "",
-  dateOfferAccepted: "",
-  scheduledClosingDate: "",
-  revisedClosingDate1: "",
-  revisedClosingDate2: "",
-  actualClosingDate: "",
-  deposits: [
-    {
-      number: "Deposit 1",
-      amount: "",
-      dateReceived: "",
-      method: "",
-      dateDeposited: "",
-      trustAccount: "",
-    },
-    {
-      number: "Deposit 2",
-      amount: "",
-      dateReceived: "",
-      method: "",
-      dateDeposited: "",
-      trustAccount: "",
-    },
-  ],
-  totalDeposits: "",
-  trustLedgerRef: "",
-  didTransactionClose: "",
-  disbursements: [
-    { description: "Disbursement to Vendor's Lawyer", amount: "", date: "" },
-    {
-      description: "Disbursement to Brokerage (Commission/Fees)",
-      amount: "",
-      date: "",
-    },
-    { description: "Refund to Purchaser (if any)", amount: "", date: "" },
-    { description: "Other Disbursements (specify)", amount: "", date: "" },
-  ],
-  trustBalance: "",
-  reasonIfNotClosed: "",
-  conditions: [
-    { condition: "Financing", status: "", date: "", docInFile: "" },
-    { condition: "Inspection", status: "", date: "", docInFile: "" },
-    {
-      condition: "Sale of Purchaser's Property",
-      status: "",
-      date: "",
-      docInFile: "",
-    },
-    { condition: "Other 1", status: "", date: "", docInFile: "" },
-    { condition: "Other 2", status: "", date: "", docInFile: "" },
-  ],
-  documents: [
-    { document: "Listing Agreement", inFile: "", comments: "" },
-    { document: "MLS® Listing Sheet", inFile: "", comments: "" },
-    {
-      document: "Agreement of Purchase and Sale (APS)",
-      inFile: "",
-      comments: "",
-    },
-    { document: "Waivers / Notices of Fulfillment", inFile: "", comments: "" },
-    { document: "Amendments to APS or Listing", inFile: "", comments: "" },
-    { document: "Trust Deposit Receipts", inFile: "", comments: "" },
-    {
-      document: "Deposit Direction / Mutual Release (if applicable)",
-      inFile: "",
-      comments: "",
-    },
-    {
-      document: "Commission Statement / Trade Record Sheet",
-      inFile: "",
-      comments: "",
-    },
-    {
-      document: "Brokerage Disbursement Instructions / Statements",
-      inFile: "",
-      comments: "",
-    },
-    { document: "Inspection Report", inFile: "", comments: "" },
-    { document: "Appraisal", inFile: "", comments: "" },
-    {
-      document: "Direction re: Commission / Referral Agreements",
-      inFile: "",
-      comments: "",
-    },
-    {
-      document: "Relevant Email / Written Correspondence",
-      inFile: "",
-      comments: "",
-    },
-  ],
-  missingDocuments: "",
-  depositsDepositedWithoutDelay: "",
-  depositsDetails: "",
-  trustFundsDisbursed: "",
-  trustFundsDetails: "",
-  trustLedgerAgrees: "",
-  trustLedgerDetails: "",
-  preparedByName: "",
-  preparedSignature: "",
-  preparedDate: "",
-  reviewedByName: "",
-  reviewedSignature: "",
-  reviewedDate: "",
-};
-
-const INPUT =
-  "flex-1 min-w-0 rounded border border-[#d1d5db] text-[0.88rem] bg-[#f9fafb] shadow-none focus:outline-[#1f4f8f] focus:border-[#1f4f8f] focus:bg-white focus:outline-[1px] placeholder:text-gray-400 leading-[1.4]";
-const ROW = "flex items-center gap-2";
-
-export default function TransactionFileDocumentationFormPage() {
+export function TransactionFileDocumentationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useForm<TransactionFileDocumentationFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues,
+    defaultValues: transactionFileDocumentationDefaultValues,
     mode: "onChange",
   });
 
@@ -171,19 +40,7 @@ export default function TransactionFileDocumentationFormPage() {
     setFocus,
   } = form;
 
-  const formErrors = useMemo(() => {
-    const errorList: FormError[] = [];
-    Object.entries(errors).forEach(([key, error]) => {
-      if (error && typeof error === "object" && "message" in error) {
-        errorList.push({
-          field: key.charAt(0).toUpperCase() + key.slice(1),
-          message: String(error.message),
-          severity: "error",
-        });
-      }
-    });
-    return errorList;
-  }, [errors]);
+  const formErrors = useFormErrors(errors);
 
   const onSubmit = async (data: TransactionFileDocumentationFormValues) => {
     if (formErrors.length > 0) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useForm, useFieldArray, type Path } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -16,36 +16,14 @@ import { FormTextarea } from "@/components/forms/FormTextarea";
 import {
   FormErrorsDisplay,
   FormErrorsSummary,
-  type FormError,
 } from "@/components/forms/FormErrorsDisplay";
 import {
   reconcilingItemsLogSchema,
   type ReconcilingItemsLogFormValues,
 } from "@/types/reconciling-items-log";
-
-const defaultValues: ReconcilingItemsLogFormValues = {
-  trustAccountName: "",
-  monthPeriod: "",
-  trustAccountNumber: "",
-
-  items: [
-    {
-      itemNumber: "",
-      dateIdentified: "",
-      description: "",
-      amount: "",
-      type: "",
-      expectedResolutionDate: "",
-      actionNotes: "",
-      actualResolutionDate: "",
-      resolvedBy: "",
-    },
-  ],
-};
-
-const INPUT =
-  "flex-1 min-w-0 rounded border border-[#d1d5db] text-[0.88rem] bg-[#f9fafb] shadow-none focus:outline-[#1f4f8f] focus:border-[#1f4f8f] focus:bg-white focus:outline-[1px] placeholder:text-gray-400 leading-[1.4]";
-const ROW = "flex items-center gap-2";
+import { INPUT, ROW } from "@/features/real-estate/constants/form-config";
+import { reconcilingItemsLogDefaultValues } from "@/features/real-estate/constants/default-values";
+import { useFormErrors } from "@/features/real-estate/utils/form-errors";
 
 const TYPE_OPTIONS = [
   "Outstanding Cheque",
@@ -54,12 +32,12 @@ const TYPE_OPTIONS = [
   "Other",
 ];
 
-export default function ReconcilingItemsLogPage() {
+export function ReconcilingItemsLogForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<ReconcilingItemsLogFormValues>({
     resolver: zodResolver(reconcilingItemsLogSchema),
-    defaultValues,
+    defaultValues: reconcilingItemsLogDefaultValues,
     mode: "onChange",
   });
 
@@ -75,19 +53,7 @@ export default function ReconcilingItemsLogPage() {
 
   const itemFields = useFieldArray({ control, name: "items" });
 
-  const formErrors = useMemo(() => {
-    const errorList: FormError[] = [];
-    Object.entries(errors).forEach(([key, error]) => {
-      if (error && typeof error === "object" && "message" in error) {
-        errorList.push({
-          field: key.charAt(0).toUpperCase() + key.slice(1),
-          message: String(error.message),
-          severity: "error",
-        });
-      }
-    });
-    return errorList;
-  }, [errors]);
+  const formErrors = useFormErrors(errors);
 
   const onSubmit = async (data: ReconcilingItemsLogFormValues) => {
     if (formErrors.length > 0) {

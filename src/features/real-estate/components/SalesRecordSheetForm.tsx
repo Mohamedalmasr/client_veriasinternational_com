@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useForm, useFieldArray, type Path } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -16,71 +16,21 @@ import { FormTextarea } from "@/components/forms/FormTextarea";
 import {
   FormErrorsDisplay,
   FormErrorsSummary,
-  FormError,
 } from "@/components/forms/FormErrorsDisplay";
 import {
   salesRecordSheetSchema,
   type SalesRecordSheetFormValues,
 } from "@/types/sales-record-sheet";
+import { INPUT, ROW } from "@/features/real-estate/constants/form-config";
+import { salesRecordSheetDefaultValues } from "@/features/real-estate/constants/default-values";
+import { useFormErrors } from "@/features/real-estate/utils/form-errors";
 
-const defaultValues: SalesRecordSheetFormValues = {
-  dealStatus: "Firm",
-  salesFileNo: "",
-  mlsNo: "",
-
-  vendorEntries: [{ entityType: "individual", identifierType: "name", name: "" }],
-  vendorTel: "",
-  vendorEmail: "",
-  purchaserEntries: [{ entityType: "individual", identifierType: "name", name: "" }],
-  purchaserTel: "",
-  purchaserEmail: "",
-
-  unitNumber: "",
-  streetNumber: "",
-  streetName: "",
-  city: "",
-  province: "",
-  postalCode: "",
-
-  listingSide: "L",
-  purchasePrice: "",
-
-  commissionType: "rate",
-  commissionRate: "",
-  commissionAmount: "",
-
-  listingAgreementDate: "",
-  apsDate: "",
-  scheduledClosingDate: "",
-  revisedClosingNotes: "",
-
-  deposits: [
-    { depositNo: "Deposit 1", amount: "", dateReceived: "", method: "Cash", dateToTrust: "", bankRef: "", trustReceipt: "", ledgerRef: "" },
-  ],
-
-  conditions: "",
-  conditionsMetDate: "",
-  trustDisbursementDate: "",
-  disbursedTo: "",
-  fileClosedDate: "",
-
-  preparedBy: "",
-  preparedDate: "",
-  managerReviewBy: "",
-  reviewDate: "",
-  managerNotes: "",
-};
-
-const INPUT =
-  "flex-1 min-w-0 rounded border border-[#d1d5db] text-[0.88rem] bg-[#f9fafb] shadow-none focus:outline-[#1f4f8f] focus:border-[#1f4f8f] focus:bg-white focus:outline-[1px] placeholder:text-gray-400 leading-[1.4]";
-const ROW = "flex items-center gap-2";
-
-export default function SalesRecordSheetTemplatePage() {
+export function SalesRecordSheetForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<SalesRecordSheetFormValues>({
     resolver: zodResolver(salesRecordSheetSchema),
-    defaultValues,
+    defaultValues: salesRecordSheetDefaultValues,
     mode: "onChange",
   });
 
@@ -100,19 +50,7 @@ export default function SalesRecordSheetTemplatePage() {
 
   const commissionType = watch("commissionType");
 
-  const formErrors = useMemo(() => {
-    const errorList: FormError[] = [];
-    Object.entries(errors).forEach(([key, error]) => {
-      if (error && typeof error === "object" && "message" in error) {
-        errorList.push({
-          field: key.charAt(0).toUpperCase() + key.slice(1),
-          message: String(error.message),
-          severity: "error",
-        });
-      }
-    });
-    return errorList;
-  }, [errors]);
+  const formErrors = useFormErrors(errors);
 
   const onSubmit = async (data: SalesRecordSheetFormValues) => {
     if (formErrors.length > 0) {
